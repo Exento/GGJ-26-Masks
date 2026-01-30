@@ -1,24 +1,55 @@
 using UnityEngine;
 
-public class PoseVisualizer : MonoBehaviour
+public class PoseManager : MonoBehaviour
 {
     public UDPReceiver receiver;
-    public GameObject noseCube;
+    public GameObject jointPrefab;
+    private GameObject[] jointsPerson1 = new GameObject[13];
+    private GameObject[] jointsPerson2 = new GameObject[13];
+
+    void Start()
+    {
+        // Erstelle 26 Kugeln insgesamt
+        for (int i = 0; i < 13; i++)
+        {
+            jointsPerson1[i] = Instantiate(jointPrefab);
+            jointsPerson2[i] = Instantiate(jointPrefab);
+            // Optische Unterscheidung
+            jointsPerson1[i].GetComponent<Renderer>().material.color = Color.red;
+            jointsPerson2[i].GetComponent<Renderer>().material.color = Color.blue;
+        }
+    }
 
     void Update()
     {
         string data = receiver.lastReceivedPacket;
         if (string.IsNullOrEmpty(data)) return;
 
-        // Split the string into points
-        string[] points = data.Split(',');
-        if (points.Length >= 2)
-        {
-            float x = float.Parse(points[0]);
-            float y = float.Parse(points[1]);
+        string[] persons = data.Split('#'); // Teile den String bei '#'
 
-            // Map 0-1 coordinates to Unity World Space (adjust multipliers as needed)
-            noseCube.transform.position = new Vector3(x * 10, (1 - y) * 10, 0);
+        // Verarbeite Person 1
+        UpdateSkelett(persons[0], jointsPerson1);
+
+        // Verarbeite Person 2 (falls vorhanden)
+        if (persons.Length > 1)
+        {
+            UpdateSkelett(persons[1], jointsPerson2);
+        }
+    }
+
+    void UpdateSkelett(string pData, GameObject[] jointArray)
+    {
+        string[] coords = pData.Split(',');
+        for (int i = 0; i < jointArray.Length; i++)
+        {
+            int startIndex = i * 2;
+            if (startIndex + 1 < coords.Length)
+            {
+                float x = float.Parse(coords[startIndex]);
+                float y = float.Parse(coords[startIndex + 1]);
+                Vector3 newPos = new Vector3(x * 16f - 8f, (1 - y) * 9f - 4.5f, 0);
+                jointArray[i].transform.position = Vector3.Lerp(jointArray[i].transform.position, newPos, Time.deltaTime * 15f);
+            }
         }
     }
 }
