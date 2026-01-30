@@ -9,8 +9,8 @@ public class GameModeRunner : MonoBehaviour
     public Transform endPoint;
     public Transform spawnParent;
 
-    [Header("Dependencies")]
-    public MonoBehaviour poseJudgeBehaviour; // assign something that implements IPoseJudge
+    //[Header("Dependencies")]
+    //public MonoBehaviour poseJudgeBehaviour; // assign something that implements IPoseJudge
     //private IPoseJudge PoseJudge => (IPoseJudge)poseJudgeBehaviour;
 
     private GameModeDefinition _mode;
