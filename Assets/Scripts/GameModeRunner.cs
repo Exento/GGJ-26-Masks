@@ -29,6 +29,7 @@ public class GameModeRunner : MonoBehaviour
 
     private IEnumerator RunLoop()
     {
+        MusicController.Instance.Play();  
         for (int round = 0; round < _mode.rounds; round++)
         {
             var def = PickMaskDefinition();
@@ -37,6 +38,7 @@ public class GameModeRunner : MonoBehaviour
             yield return new WaitForSeconds(_mode.timeBetweenMasks);
         }
 
+        MusicController.Instance.Stop();  
         Debug.Log($"Mode finished. Score: {_score}");
     }
 
