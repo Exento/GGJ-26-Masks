@@ -69,18 +69,38 @@ public class GameModeRunner : MonoBehaviour
 
     private void SpawnMask(MaskDefinition def)
     {
-        if (def == null || def.maskPrefab == null) return;
+        if (def == null)
+        {
+            Debug.LogWarning("[SpawnMask] def is null");
+            return;
+        }
 
-        var go = Instantiate(def.maskPrefab,
-                             startPoint.position,
-                             startPoint.rotation,
-                             spawnParent ? spawnParent : null);
+        if (def.maskPrefab == null)
+        {
+            Debug.LogWarning($"[SpawnMask] maskPrefab is null (def: {def.name})");
+            return;
+        }
+
+        Debug.Log($"[SpawnMask] Spawning '{def.name}' at {startPoint.position}");
+
+        var go = Instantiate(def.maskPrefab, startPoint.position, startPoint.rotation, spawnParent ? spawnParent : null);
+
+        Debug.Log($"[SpawnMask] Instantiated '{go.name}'");
 
         var instance = go.GetComponent<MaskInstance>();
-        if (!instance) instance = go.AddComponent<MaskInstance>();
+        if (!instance)
+        {
+            instance = go.AddComponent<MaskInstance>();
+            Debug.Log("[SpawnMask] Added MaskInstance component");
+        }
+        else
+        {
+            Debug.Log("[SpawnMask] Found existing MaskInstance component");
+        }
 
-        instance.Initialize(startPoint, playerPoint, endPoint,
-                           def.travelDuration, def.travelCurve, def.evaluateWindowSeconds);
+        instance.Initialize(startPoint, playerPoint, endPoint, def.travelDuration, def.travelCurve, def.evaluateWindowSeconds);
+
+        Debug.Log("[SpawnMask] Initialized + subscribed events");
 
         instance.ReachedPlayerZone += OnMaskAtPlayer;
         instance.Finished += OnMaskFinished;

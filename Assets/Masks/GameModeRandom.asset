@@ -15,6 +15,8 @@ MonoBehaviour:
   modeName: RandomObjects
   selectionStyle: 1
   masks:
+  - {fileID: 11400000, guid: ad67d4c27dccadd4aaa790c4c0b38f30, type: 2}
+  - {fileID: 11400000, guid: dd323ddd20b065741974ca3a43bc5dcf, type: 2}
   - {fileID: 11400000, guid: cf76edc5150bbb24c8d92947e312653c, type: 2}
   rounds: 10
   timeBetweenMasks: 0.75

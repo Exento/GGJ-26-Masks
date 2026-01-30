@@ -1206,9 +1206,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f5bfe5f6a555dd428c5a87d9e4c9b90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  availableModes: []
+  availableModes:
+  - {fileID: 11400000, guid: 0051e27bed1b0bc4ea6d1d15449bf9dc, type: 2}
   startModeIndex: 0
-  runner: {fileID: 0}
+  runner: {fileID: 1341058187}
 --- !u!114 &1341058187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1906,6 +1907,10 @@ PrefabInstance:
     - target: {fileID: 4566895691004953723, guid: 588121a87126da14cb076ea963255bd8, type: 3}
       propertyPath: m_Name
       value: Mask
+      objectReference: {fileID: 0}
+    - target: {fileID: 4566895691004953723, guid: 588121a87126da14cb076ea963255bd8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4977434188885611666, guid: 588121a87126da14cb076ea963255bd8, type: 3}
       propertyPath: m_LocalPosition.x
