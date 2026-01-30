@@ -262,7 +262,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 81e51dc71f3e12745bd165063b152804, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1337,10 +1337,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61e74689195b5dd4480e3bc32ba58134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source: {fileID: 0}
+  musicSource: {fileID: 0}
   defaultTrack: {fileID: 8300000, guid: 582c3f8065dd35c45b7f861e7c7cbce8, type: 3}
-  volume: 0.8
+  musicVolume: 0.8
   playOnStart: 1
+  sfxSource: {fileID: 0}
+  cheerClips:
+  - {fileID: 8300000, guid: 7c9e9b9a040b6a94cbe5cfc91b83b08f, type: 3}
+  - {fileID: 8300000, guid: 18abeede4f7a5a94887fd27f703f6040, type: 3}
+  booClips:
+  - {fileID: 8300000, guid: 241e413fb463f424f8e076f239fcc3e3, type: 3}
+  sfxVolume: 1
 --- !u!1 &1360275303
 GameObject:
   m_ObjectHideFlags: 0

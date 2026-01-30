@@ -4,61 +4,77 @@ public class MusicController : MonoBehaviour
 {
     public static MusicController Instance { get; private set; }
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource source;
+    [Header("Music")]
+    [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioClip defaultTrack;
-    [Range(0f, 1f)][SerializeField] private float volume = 0.8f;
+    [Range(0f, 1f)][SerializeField] private float musicVolume = 0.8f;
     [SerializeField] private bool playOnStart = true;
+
+    [Header("SFX (Cheer / Boo)")]
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioClip[] cheerClips;
+    [SerializeField] private AudioClip[] booClips;
+    [Range(0f, 1f)][SerializeField] private float sfxVolume = 1f;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        if (!source) source = GetComponent<AudioSource>();
-        if (!source) source = gameObject.AddComponent<AudioSource>();
+        if (!musicSource) musicSource = GetComponent<AudioSource>();
+        if (!musicSource) musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.loop = true;
+        musicSource.playOnAwake = false;
+        musicSource.volume = musicVolume;
 
-        source.loop = true;
-        source.playOnAwake = false;
-        source.volume = volume;
+        if (!sfxSource)
+        {
+            sfxSource = gameObject.AddComponent<AudioSource>();
+            sfxSource.loop = false;
+            sfxSource.playOnAwake = false;
+        }
+        sfxSource.volume = sfxVolume;
     }
 
     private void Start()
     {
-        if (defaultTrack) source.clip = defaultTrack;
-        if (playOnStart && source.clip) source.Play();
+        if (defaultTrack) musicSource.clip = defaultTrack;
+        if (playOnStart && musicSource.clip) musicSource.Play();
     }
 
+    // ---- Music ----
     public void Play(AudioClip clip = null)
     {
-        if (clip && source.clip != clip) source.clip = clip;
-        if (!source.clip) { Debug.LogWarning("[MusicController] No clip to play"); return; }
-
-        if (!source.isPlaying) source.Play();
+        if (clip && musicSource.clip != clip) musicSource.clip = clip;
+        if (!musicSource.clip) { Debug.LogWarning("[MusicController] No music clip to play"); return; }
+        if (!musicSource.isPlaying) musicSource.Play();
     }
 
-    public void Stop()
+    public void Stop() { if (musicSource.isPlaying) musicSource.Stop(); }
+    public void Pause(bool paused) { if (paused) musicSource.Pause(); else musicSource.UnPause(); }
+    public void SetMusicVolume(float v01) { musicVolume = Mathf.Clamp01(v01); musicSource.volume = musicVolume; }
+
+    // ---- SFX ----
+    public void PlayCheer() => PlayRandomOneShot(cheerClips, "cheer");
+    public void PlayBoo()   => PlayRandomOneShot(booClips, "boo");
+    public void SetSfxVolume(float v01) { sfxVolume = Mathf.Clamp01(v01); sfxSource.volume = sfxVolume; }
+
+    private void PlayRandomOneShot(AudioClip[] clips, string label)
     {
-        if (source.isPlaying) source.Stop();
-    }
+        if (clips == null || clips.Length == 0)
+        {
+            Debug.LogWarning($"[MusicController] No {label} clips assigned");
+            return;
+        }
 
-    public void Pause(bool paused)
-    {
-        if (paused) source.Pause();
-        else source.UnPause();
-    }
+        var clip = clips[Random.Range(0, clips.Length)];
+        if (!clip)
+        {
+            Debug.LogWarning($"[MusicController] {label} clip was null");
+            return;
+        }
 
-    public void SetVolume(float v01)
-    {
-        volume = Mathf.Clamp01(v01);
-        source.volume = volume;
+        sfxSource.PlayOneShot(clip);
     }
-
-    public bool IsPlaying => source && source.isPlaying;
 }
