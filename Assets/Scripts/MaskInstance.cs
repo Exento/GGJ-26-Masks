@@ -87,13 +87,14 @@ public class MaskInstance : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.transform.root.CompareTag("Player"))
+        // Check if the thing entering the area is the Player
+        if (other.CompareTag("Player"))
         {
             if (gotHit) return;
             gotHit = true;
-            Debug.Log("Obstacle hit player!");
+            Debug.Log("Player entered the boundary!");
             MusicController.Instance.PlayBoo();
         }
     }
